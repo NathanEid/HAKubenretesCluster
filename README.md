@@ -56,9 +56,9 @@ Ensure you are logged in as the root user on all nodes.
         option httpchk GET /healthz
         http-check expect status 200
         balance     roundrobin
-        server master01 192.168.80.100:6443 check
-        server master02 192.168.80.101:6443 check
-        server master03 192.168.80.102:6443 check
+        server master01 192.168.1.5:6443 check
+        server master02 192.168.1.6:6443 check
+        server master03 192.168.1.7:6443 check
     ```
 
 4. **Verify and restart HAProxy**:
@@ -96,15 +96,15 @@ Ensure you are logged in as the root user on all nodes.
             advert_int 1
             authentication {
                 auth_type PASS
-                auth_pass Qwerty@1234
+                auth_pass password
             }
             virtual_ipaddress {
-                192.168.80.110
+                192.168.1.15
             }
-            unicast_src_ip 192.168.80.100
+            unicast_src_ip 192.168.1.5
             unicast_peer {
-              192.168.80.101
-              192.168.80.102
+              192.168.1.6
+              192.168.1.7
             }
             track_script {
                 chk_haproxy
@@ -132,15 +132,15 @@ Ensure you are logged in as the root user on all nodes.
             advert_int 1
             authentication {
                 auth_type PASS
-                auth_pass Qwerty@1234
+                auth_pass password
             }
             virtual_ipaddress {
-                192.168.80.110
+                192.168.1.15
             }
-            unicast_src_ip 192.168.80.101
+            unicast_src_ip 192.168.1.6
             unicast_peer {
-              192.168.80.100
-              192.168.80.102
+              192.168.1.5
+              192.168.1.7
             }
             track_script {
                 chk_haproxy
@@ -168,15 +168,15 @@ Ensure you are logged in as the root user on all nodes.
             advert_int 1
             authentication {
                 auth_type PASS
-                auth_pass Qwerty@1234
+                auth_pass password
             }
             virtual_ipaddress {
-                192.168.80.110
+                192.168.1.15
             }
-            unicast_src_ip 192.168.80.102
+            unicast_src_ip 192.168.1.7
             unicast_peer {
-              192.168.80.100
-              192.168.80.101
+              192.168.1.5
+              192.168.1.6
             }
             track_script {
                 chk_haproxy
@@ -239,7 +239,7 @@ Ensure you are logged in as the root user on all nodes.
     ```sh
     apt-get install -y apt-transport-https ca-certificates curl gpg
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
     apt update
     apt install -y kubelet kubeadm kubectl
     apt-mark hold kubelet kubeadm kubectl
@@ -257,7 +257,7 @@ Ensure you are logged in as the root user on all nodes.
     ```plaintext
     apiVersion: kubeadm.k8s.io/v1beta3
     kind: ClusterConfiguration
-    controlPlaneEndpoint: "192.168.80.110:6443"
+    controlPlaneEndpoint: "192.168.1.15:6443"
     ```
 
 2. **Initialize the cluster**:
